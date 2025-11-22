@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Papers</h2>
+{% for p in papers %}
+  <div class="card">
+    <b>{{ p.title }}</b> — {{ p.track.name }} <br>
+    Status: <b>{{ p.get_status_display }}</b>
+    <div class="muted">Submitted {{ p.submitted_on }}</div>
+  </div>
+{% empty %}
+  <p>No submissions yet.</p>
+{% endfor %}
+{% endblock %}

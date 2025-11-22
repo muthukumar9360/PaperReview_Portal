@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Assign Reviewers: {{ paper.title }}</h2>
+<p class="muted">Already assigned IDs: {{ already|join:", " }}</p>
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Assign</button>
+</form>
+{% endblock %}

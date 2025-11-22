@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reviewer Dashboard</h2>
+{% for a in assignments %}
+  <div class="card">
+    <b>{{ a.paper.title }}</b> — {{ a.paper.track.name }}
+    <div class="muted">Author: {{ a.paper.author.username }}</div>
+    <a class="btn" href="{{ a.paper.file_link.url }}" target="_blank">Download Paper</a>
+    <a class="btn" href="{% url 'submit_review' a.id %}">Submit / Edit Review</a>
+    {% if a.decision %}<span class="muted"> (Submitted)</span>{% endif %}
+  </div>
+{% empty %}
+  <p>No assignments.</p>
+{% endfor %}
+{% endblock %}

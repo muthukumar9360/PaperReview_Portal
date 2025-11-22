@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ paper.title }}</h2>
+<p>Track: {{ paper.track.name }} | Author: {{ paper.author.username }}</p>
+<p>Status: <b>{{ paper.get_status_display }}</b></p>
+
+<h3>Reviews</h3>
+{% for r in reviews %}
+  <div class="card">
+    <b>Reviewer:</b> {{ r.reviewer.username }}<br>
+    <b>Decision:</b> {{ r.get_decision_display|default:"—" }}<br>
+    <b>Comments:</b><br>{{ r.comments|linebreaks }}
+    <div class="muted">Reviewed on: {{ r.reviewed_on|default:"—" }}</div>
+  </div>
+{% empty %}
+  <p>No reviews yet.</p>
+{% endfor %}
+
+<h3>Final Decision</h3>
+<form method="post">{% csrf_token %}
+  {{ decision_form.as_p }}
+  <button type="submit">Save Decision</button>
+</form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Editor Dashboard</h2>
+
+<h3>New Submissions</h3>
+{% for p in submitted %}
+  <div class="card">
+    <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
+    <div><a class="btn" href="{% url 'assign_reviewers' p.id %}">Assign Reviewers</a></div>
+  </div>
+{% empty %}<p>None.</p>{% endfor %}
+
+<h3>Under Review</h3>
+{% for p in under_review %}
+  <div class="card">
+    <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
+    <div><a class="btn" href="{% url 'paper_detail' p.id %}">View Reviews / Decide</a></div>
+  </div>
+{% empty %}<p>None.</p>{% endfor %}
+
+<h3>Decided (Accepted/Rejected)</h3>
+{% for p in decided %}
+  <div class="card">
+    <b>{{ p.title }}</b> — {{ p.get_status_display }}
+    <div><a class="btn" href="{% url 'paper_detail' p.id %}">Details</a></div>
+  </div>
+{% empty %}<p>None.</p>{% endfor %}
+{% endblock %}
