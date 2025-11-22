@@ -1,6 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    body {
+        background: #f3f6fb;
+        font-family: Arial, sans-serif;
+    }
+    h2 {
+        text-align: center;
+        margin-top: 25px;
+        color: #222;
+        font-size: 30px;
+    }
+    .papers-container {
+        max-width: 900px;
+        margin: 30px auto;
+    }
+    .card {
+        background: #ffffff;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: transform 0.15s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+    }
+    .card b {
+        color: #1d4ed8;
+    }
+    .muted {
+        font-size: 13px;
+        color: #666;
+        margin-top: 4px;
+    }
+    p {
+        text-align: center;
+        color: #555;
+    }
+</style>
+
 <h2>My Papers</h2>
+<div class="papers-container">
 {% for p in papers %}
   <div class="card">
     <b>{{ p.title }}</b> — {{ p.track.name }} <br>
@@ -10,4 +51,5 @@
 {% empty %}
   <p>No submissions yet.</p>
 {% endfor %}
+</div>
 {% endblock %}

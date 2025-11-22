@@ -7,72 +7,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 24px;
+            font-family: "Inter", Arial, sans-serif;
+            background: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background: #0d6efd;
+            color: white;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+
+        nav .left, nav .right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         nav a {
-            margin-right: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity .2s ease;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #0d6efd;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #e8efff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 18px;
         }
 
         .card {
-            border: 1px solid #ddd;
-            padding: 14px;
-            border-radius: 8px;
-            margin: 10px 0;
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin: 14px 0;
+            border: 1px solid #dce2ec;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
         }
 
         .muted {
             color: #666;
-            font-size: 0.9em;
-        }
-
-        ul.inline li {
-            display: inline-block;
-            margin-right: 10px;
+            font-size: 0.88em;
         }
 
         .btn {
-            padding: 6px 12px;
-            border: 1px solid #444;
+            display: inline-block;
+            background: #0d6efd;
+            color: white !important;
+            padding: 7px 14px;
             border-radius: 6px;
             text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background .2s ease;
+        }
+
+        .btn:hover {
+            background: #084ec2;
+        }
+
+        .alert {
+            background: #eaf4ff;
+            border-left: 4px solid #0d6efd;
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #d7dbe5;
+            margin: 0;
         }
     </style>
 </head>
 
 <body>
     <nav>
-        {% if user.is_authenticated %}
-        Logged in as <b>{{ user.username }}</b> ({{ user.role }}) |
-        <a href="{% url 'home' %}">Home</a>
+        <div class="left">
+            <strong>ResearchHub</strong>
+        </div>
 
-        {% if user.role == 'author' %}
-        <a href="{% url 'author_upload' %}">Upload</a>
-        <a href="{% url 'author_my_papers' %}">My Papers</a>
-        {% elif user.role == 'editor' %}
-        <a href="{% url 'editor_dashboard' %}">Editor</a>
-        {% elif user.role == 'reviewer' %}
-        <a href="{% url 'reviewer_dashboard' %}">Reviewer</a>
-        {% endif %}
+        <div class="right">
+            {% if user.is_authenticated %}
+                <span>Hi, <b>{{ user.username }}</b> ({{ user.role }})</span>
+                <a href="{% url 'home' %}">Home</a>
 
-        <!-- Secure POST logout -->
-        <form method="post" action="{% url 'logout' %}" style="display:inline">
-            {% csrf_token %}
-            <button type="submit" class="btn">Logout</button>
-        </form>
+                {% if user.role == 'author' %}
+                    <a href="{% url 'author_upload' %}">Upload</a>
+                    <a href="{% url 'author_my_papers' %}">My Papers</a>
+                {% elif user.role == 'editor' %}
+                    <a href="{% url 'editor_dashboard' %}">Editor Panel</a>
+                {% elif user.role == 'reviewer' %}
+                    <a href="{% url 'reviewer_dashboard' %}">Reviews</a>
+                {% endif %}
 
-        {% else %}
-        <a href="{% url 'login' %}">Login</a> |
-        <a href="{% url 'signup' %}">Sign up</a>
-        {% endif %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'signup' %}">Sign up</a>
+            {% endif %}
+        </div>
     </nav>
 
-    <hr>
-    {% for message in messages %}
-    <div class="card">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+        {% endfor %}
+
+        {% block content %}{% endblock %}
+    </div>
 </body>
 
 </html>

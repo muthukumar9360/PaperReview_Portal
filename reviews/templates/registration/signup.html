@@ -1,8 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Sign up</h2>
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Create account</button>
-</form>
+<style>
+    body {
+        background: #f2f5f9;
+        font-family: Arial, sans-serif;
+    }
+    .signup-container {
+        max-width: 420px;
+        margin: 100px auto;
+        padding: 35px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+    .signup-container h2 {
+        text-align: center;
+        margin-bottom: 22px;
+        color: #333;
+        font-size: 26px;
+    }
+    .signup-container button {
+        width: 100%;
+        padding: 12px;
+        background: #28a745;
+        color: white;
+        font-size: 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .signup-container button:hover {
+        background: #1e7e34;
+    }
+</style>
+
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Account</button>
+    </form>
+</div>
 {% endblock %}

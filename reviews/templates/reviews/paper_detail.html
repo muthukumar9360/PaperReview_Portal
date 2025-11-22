@@ -1,24 +1,111 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ paper.title }}</h2>
-<p>Track: {{ paper.track.name }} | Author: {{ paper.author.username }}</p>
-<p>Status: <b>{{ paper.get_status_display }}</b></p>
+<style>
+    body {
+        background: #f3f6fb;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 850px;
+        margin: 40px auto;
+    }
+    h2 {
+        font-size: 30px;
+        margin-bottom: 5px;
+        color: #222;
+    }
+    .meta {
+        color: #555;
+        margin-bottom: 15px;
+        font-size: 15px;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: white;
+        background: #6c63ff;
+        margin-bottom: 20px;
+    }
+    h3 {
+        font-size: 22px;
+        margin-top: 35px;
+        color: #333;
+        border-left: 5px solid #0d6efd;
+        padding-left: 10px;
+    }
+    .review-card {
+        background: white;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 12px 0;
+        box-shadow: 0px 3px 9px rgba(0,0,0,0.08);
+    }
+    .review-card b {
+        color: #111;
+    }
+    .muted {
+        color: #777;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+    form {
+        margin-top: 15px;
+        background: white;
+        padding: 22px;
+        border-radius: 10px;
+        box-shadow: 0px 3px 9px rgba(0,0,0,0.08);
+    }
+    button {
+        background: #0d6efd;
+        border: none;
+        padding: 9px 15px;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+    button:hover {
+        background: #084ec2;
+    }
+    .empty {
+        color: #777;
+        font-style: italic;
+        margin-top: 10px;
+    }
+</style>
 
-<h3>Reviews</h3>
-{% for r in reviews %}
-  <div class="card">
-    <b>Reviewer:</b> {{ r.reviewer.username }}<br>
-    <b>Decision:</b> {{ r.get_decision_display|default:"—" }}<br>
-    <b>Comments:</b><br>{{ r.comments|linebreaks }}
-    <div class="muted">Reviewed on: {{ r.reviewed_on|default:"—" }}</div>
-  </div>
-{% empty %}
-  <p>No reviews yet.</p>
-{% endfor %}
+<div class="container">
+    <h2>{{ paper.title }}</h2>
+    <p class="meta">
+        Track: <b>{{ paper.track.name }}</b> |
+        Author: <b>{{ paper.author.username }}</b>
+    </p>
 
-<h3>Final Decision</h3>
-<form method="post">{% csrf_token %}
-  {{ decision_form.as_p }}
-  <button type="submit">Save Decision</button>
-</form>
+    <div class="status-badge">
+        {{ paper.get_status_display }}
+    </div>
+
+    <h3>Reviews</h3>
+    {% for r in reviews %}
+    <div class="review-card">
+        <b>Reviewer:</b> {{ r.reviewer.username }}<br>
+        <b>Decision:</b> {{ r.get_decision_display|default:"—" }}<br><br>
+        <b>Comments:</b><br>
+        {{ r.comments|linebreaks }}
+        <div class="muted">Reviewed on: {{ r.reviewed_on|default:"—" }}</div>
+    </div>
+    {% empty %}
+    <p class="empty">No reviews submitted yet.</p>
+    {% endfor %}
+
+    <h3>Final Decision</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ decision_form.as_p }}
+        <button type="submit">Save Decision</button>
+    </form>
+</div>
 {% endblock %}

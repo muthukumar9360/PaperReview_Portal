@@ -1,28 +1,88 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Editor Dashboard</h2>
+<style>
+    body {
+        background: #eef2f7;
+        font-family: Arial, sans-serif;
+    }
+    .dashboard-container {
+        max-width: 900px;
+        margin: 40px auto;
+    }
+    h2 {
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 30px;
+        color: #222;
+    }
+    h3 {
+        margin-top: 40px;
+        color: #333;
+        font-size: 22px;
+        border-left: 5px solid #0d6efd;
+        padding-left: 10px;
+    }
+    .paper-card {
+        background: #fff;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin: 12px 0;
+        box-shadow: 0 3px 9px rgba(0,0,0,0.08);
+    }
+    .paper-card b {
+        font-size: 17px;
+    }
+    .btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 14px;
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .btn:hover {
+        background: #084ec2;
+    }
+    .empty {
+        color: #666;
+        font-style: italic;
+        margin: 8px 0;
+    }
+</style>
 
-<h3>New Submissions</h3>
-{% for p in submitted %}
-  <div class="card">
-    <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
-    <div><a class="btn" href="{% url 'assign_reviewers' p.id %}">Assign Reviewers</a></div>
-  </div>
-{% empty %}<p>None.</p>{% endfor %}
+<div class="dashboard-container">
+    <h2>Editor Dashboard</h2>
 
-<h3>Under Review</h3>
-{% for p in under_review %}
-  <div class="card">
-    <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
-    <div><a class="btn" href="{% url 'paper_detail' p.id %}">View Reviews / Decide</a></div>
-  </div>
-{% empty %}<p>None.</p>{% endfor %}
+    <h3>New Submissions</h3>
+    {% for p in submitted %}
+    <div class="paper-card">
+        <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
+        <div><a class="btn" href="{% url 'assign_reviewers' p.id %}">Assign Reviewers</a></div>
+    </div>
+    {% empty %}
+    <p class="empty">No new submissions.</p>
+    {% endfor %}
 
-<h3>Decided (Accepted/Rejected)</h3>
-{% for p in decided %}
-  <div class="card">
-    <b>{{ p.title }}</b> — {{ p.get_status_display }}
-    <div><a class="btn" href="{% url 'paper_detail' p.id %}">Details</a></div>
-  </div>
-{% empty %}<p>None.</p>{% endfor %}
+    <h3>Under Review</h3>
+    {% for p in under_review %}
+    <div class="paper-card">
+        <b>{{ p.title }}</b> by {{ p.author.username }} — {{ p.track.name }}
+        <div><a class="btn" href="{% url 'paper_detail' p.id %}">View Reviews / Decide</a></div>
+    </div>
+    {% empty %}
+    <p class="empty">No papers currently under review.</p>
+    {% endfor %}
+
+    <h3>Decided (Accepted / Rejected)</h3>
+    {% for p in decided %}
+    <div class="paper-card">
+        <b>{{ p.title }}</b> — {{ p.get_status_display }}
+        <div><a class="btn" href="{% url 'paper_detail' p.id %}">Details</a></div>
+    </div>
+    {% empty %}
+    <p class="empty">No final decisions yet.</p>
+    {% endfor %}
+</div>
 {% endblock %}
